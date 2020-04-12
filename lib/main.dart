@@ -28,6 +28,8 @@ class MyApp extends StatelessWidget {
           '/topics': (context) => TopicsScreen(),
           '/profile': (context) => ProfileScreen(),
           '/about': (context) => AboutScreen(),
+          '/read': (context) => ReadScreen(),
+          '/purchase': (context) => MarketScreen(),
         },
 
         // Theme

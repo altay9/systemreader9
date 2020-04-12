@@ -15,6 +15,12 @@ class AppBottomNav extends StatelessWidget {
         BottomNavigationBarItem(
             icon: Icon(FontAwesomeIcons.userCircle, size: 20),
             title: Text('Profile')),
+        BottomNavigationBarItem(
+            icon: Icon(FontAwesomeIcons.bolt, size: 20),
+            title: Text('Öyküleri Oku')),
+        BottomNavigationBarItem(
+            icon: Icon(FontAwesomeIcons.bolt, size: 20),
+            title: Text('Jeton')),
       ].toList(),
       fixedColor: Colors.deepPurple[200],
       onTap: (int idx) {
@@ -27,6 +33,12 @@ class AppBottomNav extends StatelessWidget {
             break;
           case 2:
             Navigator.pushNamed(context, '/profile');
+            break;
+          case 3:
+            Navigator.pushNamed(context, '/read');
+            break;
+          case 4:
+            Navigator.pushNamed(context, '/purchase');
             break;
         }
       },

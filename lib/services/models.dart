@@ -81,6 +81,7 @@ class Report {
   Report({ this.uid, this.topics, this.total });
 
   factory Report.fromMap(Map data) {
+    if(data!=null)
     return Report(
       uid: data['uid'],
       total: data['total'] ?? 0,
