@@ -1,4 +1,4 @@
-package com.example.quizapp;
+package com.neodeus.define9;
 
 import android.os.Bundle;
 import io.flutter.app.FlutterActivity;
