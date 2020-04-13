@@ -91,3 +91,18 @@ class Report {
 
 }
 
+class Token {
+  String uid;
+  int total;
+
+  Token({ this.uid, this.total });
+
+  factory Token.fromMap(Map data) {
+    if(data!=null)
+      return Token(
+        uid: data['uid'],
+        total: data['total'] ?? 0
+      );
+  }
+
+}

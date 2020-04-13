@@ -1,10 +1,14 @@
 import 'dart:async';
 import 'dart:io';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:define9/services/globals.dart';
+import 'package:define9/services/models.dart';
 import 'package:flutter/material.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
+import 'package:provider/provider.dart';
 
 final String testID = 'gems_test';
-
+Token token;
 class MarketScreen extends StatefulWidget {
   createState() => MarketScreenState();
 }
@@ -79,9 +83,11 @@ class MarketScreenState extends State<MarketScreen> {
 
   /// Gets past purchases
   Future<void> _getPastPurchases() async {
-    QueryPurchaseDetailsResponse response =
-    await _iap.queryPastPurchases();
-
+    QueryPurchaseDetailsResponse response =  await _iap.queryPastPurchases();
+    if (response.error != null) {
+      print('Error querying past purchases: ${response.error.message}');
+      return;
+    }
     for (PurchaseDetails purchase in response.pastPurchases) {
       if (Platform.isIOS) {
         InAppPurchaseConnection.instance.completePurchase(purchase);
@@ -105,8 +111,23 @@ class MarketScreenState extends State<MarketScreen> {
     // TODO serverside verification & record consumable in the database
 
     if (purchase != null && purchase.status == PurchaseStatus.purchased) {
-      _credits = 10;
+      _updateUserTokenPurchase();
     }
+  }
+  /// Database write to update token after purchase
+  Future<void> _updateUserTokenPurchase() {
+    return Global.tokenRef.upsert(
+      ({
+        'total': FieldValue.increment(9)
+      }),
+    );
+  }
+  Future<void> _updateUserTokenConsume() {
+    return Global.tokenRef.upsert(
+      ({
+        'total': FieldValue.increment(-1)
+      }),
+    );
   }
   /// Purchase a product
   void _buyProduct(ProductDetails prod) {
@@ -117,13 +138,10 @@ class MarketScreenState extends State<MarketScreen> {
   /// Spend credits and consume purchase when they run pit
   void _spendCredits(PurchaseDetails purchase) async {
 
-    /// Decrement credits
-    setState(() { _credits--; });
-
-    /// TODO update the state of the consumable to a backend database
+    _updateUserTokenConsume();
 
     // Mark consumed when credits run out
-    if (_credits == 0) {
+    if (token.total == 0) {
       var res = await _iap.consumePurchase(purchase);
       await _getPastPurchases();
     }
@@ -131,7 +149,7 @@ class MarketScreenState extends State<MarketScreen> {
   }
   @override
   Widget build(BuildContext context) {
-
+    token = Provider.of<Token>(context);
     return Scaffold(
       appBar: AppBar(
         title: Text(_available ? 'Open for Business' : 'Not Available'),
@@ -146,7 +164,7 @@ class MarketScreenState extends State<MarketScreen> {
             // UI if already purchased
               if (_hasPurchased(prod.id) != null)
                 ...[
-                  Text('💎 $_credits', style: TextStyle(fontSize: 60)),
+                  Text('💎 $token.total', style: TextStyle(fontSize: 60)),
                   FlatButton(
                     child: Text('Consume'),
                     color: Colors.green,

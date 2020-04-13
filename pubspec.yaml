@@ -36,7 +36,7 @@ dependencies:
   provider: 3.1.0
   font_awesome_flutter: 8.4.0
   webview_flutter: ^0.3.14+1
-  in_app_purchase: 0.2.0+1
+  in_app_purchase: 0.3.1+2
 dev_dependencies:
   flutter_test:
     sdk: flutter

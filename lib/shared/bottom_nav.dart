@@ -16,10 +16,10 @@ class AppBottomNav extends StatelessWidget {
             icon: Icon(FontAwesomeIcons.userCircle, size: 20),
             title: Text('Profile')),
         BottomNavigationBarItem(
-            icon: Icon(FontAwesomeIcons.bolt, size: 20),
+            icon: Icon(FontAwesomeIcons.book, size: 20),
             title: Text('Öyküleri Oku')),
         BottomNavigationBarItem(
-            icon: Icon(FontAwesomeIcons.bolt, size: 20),
+            icon: Icon(FontAwesomeIcons.coins, size: 20),
             title: Text('Jeton')),
       ].toList(),
       fixedColor: Colors.deepPurple[200],

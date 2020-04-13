@@ -2,18 +2,25 @@ import 'package:flutter/material.dart';
 import 'package:firebase_analytics/observer.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:in_app_purchase/in_app_purchase.dart';
 import 'services/services.dart';
 import 'screens/screens.dart';
 import 'package:provider/provider.dart';
 
-void main() => runApp(MyApp());
 
+void main() {
+  ///Include this in main() so purchases are enabled
+  InAppPurchaseConnection.enablePendingPurchases();
+
+  runApp(MyApp());
+}
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
         StreamProvider<Report>.value(value: Global.reportRef.documentStream),
+        StreamProvider<Token>.value(value: Global.tokenRef.documentStream),
         StreamProvider<FirebaseUser>.value(value: AuthService().user),
       ],
       child: MaterialApp(
