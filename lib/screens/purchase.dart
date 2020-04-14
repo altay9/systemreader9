@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:define9/shared/tokenprocess.dart';
 import 'package:define9/services/globals.dart';
 import 'package:define9/services/models.dart';
 import 'package:flutter/material.dart';
@@ -102,23 +103,11 @@ class MarketScreenState extends State<MarketScreen> {
     // TODO serverside verification & record consumable in the database
 
     if (purchase != null && purchase.status == PurchaseStatus.purchased) {
-      _updateUserTokenPurchase();
+      TokenProcess.getState().updateUserTokenPurchase();
       makeConsumed(purchase);
     }
   }
 
-  /// Database write to update token after purchase
-  Future<void> _updateUserTokenPurchase() {
-    return Global.tokenRef.upsert(
-      ({'total': FieldValue.increment(9)}),
-    );
-  }
-
-  Future<void> _updateUserTokenConsume() {
-    return Global.tokenRef.upsert(
-      ({'total': FieldValue.increment(-1)}),
-    );
-  }
 
   /// Purchase a product
   void _buyProduct(ProductDetails prod) {
@@ -178,7 +167,7 @@ class MarketScreenState extends State<MarketScreen> {
       FlatButton(
         child: Text('Consume'),
         color: Colors.green,
-        onPressed: () => _updateUserTokenConsume(),
+        onPressed: () => TokenProcess.getState().updateUserTokenConsume(),
       ),
       FlatButton(
         child: Text('Buy It'),
