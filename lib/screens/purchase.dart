@@ -165,11 +165,6 @@ class MarketScreenState extends State<MarketScreen> {
 
       Text('📀 ${token.total ?? 0} Jeton', style: TextStyle(fontSize: 60)),
       FlatButton(
-        child: Text('Consume'),
-        color: Colors.green,
-        onPressed: () => TokenProcess.getState().updateUserTokenConsume(),
-      ),
-      FlatButton(
         child: Text('Buy It'),
         color: Colors.green,
         onPressed: () => _buyProduct(prod),

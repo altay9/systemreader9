@@ -1,3 +1,4 @@
+import 'package:define9/shared/tokenprocess.dart';
 import 'package:flutter/material.dart';
 import '../shared/shared.dart';
 import '../services/services.dart';
@@ -169,10 +170,11 @@ class CongratsPage extends StatelessWidget {
 class QuestionPage extends StatelessWidget {
   final Question question;
   QuestionPage({this.question});
-
+  Token token;
   @override
   Widget build(BuildContext context) {
     var state = Provider.of<QuizState>(context);
+    token = Provider.of<Token>(context);
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.end,
@@ -231,6 +233,9 @@ class QuestionPage extends StatelessWidget {
   /// Bottom sheet shown when Question is answered
   _bottomSheet(BuildContext context, Option opt) {
     bool correct = opt.correct;
+    if(!correct){
+      TokenProcess.getState().updateUserTokenConsume();
+    }
     var state = Provider.of<QuizState>(context);
     showModalBottomSheet(
       context: context,
@@ -242,7 +247,10 @@ class QuestionPage extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
-              Text(correct ? 'Good Job!' : 'Wrong'),
+              Text(correct ? '🎉 Doğru!' : '😞 Yanlış...'),
+              Text(correct ? '' :'${token.total-1 ?? 0} jetonunuz kaldı.'),
+
+
               Text(
                 opt.detail,
                 style: TextStyle(fontSize: 18, color: Colors.white54),
@@ -250,7 +258,7 @@ class QuestionPage extends StatelessWidget {
               FlatButton(
                 color: correct ? Colors.green : Colors.red,
                 child: Text(
-                  correct ? 'Onward!' : 'Try Again',
+                  correct ? 'Devam!' : 'Yeniden deneyin',
                   style: TextStyle(
                     color: Colors.white,
                     letterSpacing: 1.5,
