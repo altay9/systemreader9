@@ -7,14 +7,13 @@ import 'package:flutter/material.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:provider/provider.dart';
 
-final String testID = 'gems_test';
-Token token;
 class MarketScreen extends StatefulWidget {
   createState() => MarketScreenState();
 }
 
 class MarketScreenState extends State<MarketScreen> {
-
+  final String testID = 'android.test.purchased';
+  Token token;
   /// Is the API available on the device
   bool _available = true;
 
@@ -47,33 +46,24 @@ class MarketScreenState extends State<MarketScreen> {
 
   /// Initialize data
   void _initialize() async {
-
-
     // Check availability of In App Purchases
     _available = await _iap.isAvailable();
 
     if (_available) {
-
       await _getProducts();
       await _getPastPurchases();
-
-      // Verify and deliver a purchase with your own business logic
-      _verifyPurchase();
-
     }
 
     _subscription = _iap.purchaseUpdatedStream.listen((data) => setState(() {
-      print('NEW PURCHASE');
-      _purchases.addAll(data);
-      _verifyPurchase();
-    }));
+          print('New purchase');
+          _purchases.addAll(data);
+          _verifyPurchase();
+        }));
   }
-
-
 
   /// Get all products available for sale
   Future<void> _getProducts() async {
-    Set<String> ids = Set.from(['android.test.purchased']);
+    Set<String> ids = Set.from([testID]);
     ProductDetailsResponse response = await _iap.queryProductDetails(ids);
 
     setState(() {
@@ -83,7 +73,7 @@ class MarketScreenState extends State<MarketScreen> {
 
   /// Gets past purchases
   Future<void> _getPastPurchases() async {
-    QueryPurchaseDetailsResponse response =  await _iap.queryPastPurchases();
+    QueryPurchaseDetailsResponse response = await _iap.queryPastPurchases();
     if (response.error != null) {
       print('Error querying past purchases: ${response.error.message}');
       return;
@@ -101,7 +91,8 @@ class MarketScreenState extends State<MarketScreen> {
 
   /// Returns purchase of specific product ID
   PurchaseDetails _hasPurchased(String productID) {
-    return _purchases.firstWhere( (purchase) => purchase.productID == productID, orElse: () => null);
+    return _purchases.firstWhere((purchase) => purchase.productID == productID,
+        orElse: () => null);
   }
 
   /// Your own business logic to setup a consumable
@@ -112,84 +103,91 @@ class MarketScreenState extends State<MarketScreen> {
 
     if (purchase != null && purchase.status == PurchaseStatus.purchased) {
       _updateUserTokenPurchase();
+      makeConsumed(purchase);
     }
   }
+
   /// Database write to update token after purchase
   Future<void> _updateUserTokenPurchase() {
     return Global.tokenRef.upsert(
-      ({
-        'total': FieldValue.increment(9)
-      }),
+      ({'total': FieldValue.increment(9)}),
     );
   }
+
   Future<void> _updateUserTokenConsume() {
     return Global.tokenRef.upsert(
-      ({
-        'total': FieldValue.increment(-1)
-      }),
+      ({'total': FieldValue.increment(-1)}),
     );
   }
+
   /// Purchase a product
   void _buyProduct(ProductDetails prod) {
     final PurchaseParam purchaseParam = PurchaseParam(productDetails: prod);
     // _iap.buyNonConsumable(purchaseParam: purchaseParam);
     _iap.buyConsumable(purchaseParam: purchaseParam, autoConsume: false);
   }
-  /// Spend credits and consume purchase when they run pit
-  void _spendCredits(PurchaseDetails purchase) async {
 
-    _updateUserTokenConsume();
-
-    // Mark consumed when credits run out
-    if (token.total == 0) {
-      var res = await _iap.consumePurchase(purchase);
-      await _getPastPurchases();
-    }
-
+  makeConsumed(purchase) async {
+    // Mark consumed just after succesful purchase.
+    var res = await _iap.consumePurchase(purchase);
+    await _getPastPurchases();
   }
+
+  makeConsumedTest(prod) async {
+    // Mark consumed just after succesful purchase.
+    PurchaseDetails pd = _hasPurchased(prod.id);
+    var res = await _iap.consumePurchase(pd);
+    await _getPastPurchases();
+  }
+
+  Future<List<ProductDetails>> getProductsAfterLoading() async {
+    return _products;
+  }
+
   @override
-  Widget build(BuildContext context) {
-    token = Provider.of<Token>(context);
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(_available ? 'Open for Business' : 'Not Available'),
-
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            for (var prod in _products)
-
-            // UI if already purchased
-              if (_hasPurchased(prod.id) != null)
-                ...[
-                  Text('💎 $token.total', style: TextStyle(fontSize: 60)),
-                  FlatButton(
-                    child: Text('Consume'),
-                    color: Colors.green,
-                    onPressed: () => _spendCredits(_hasPurchased(prod.id)),
-                  )
-                ]
-
-              // UI if NOT purchased
-              else ...[
-                Text(prod.title, style: Theme.of(context).textTheme.headline),
-                Text(prod.description),
-                Text(prod.price,
-                    style: TextStyle(color: Colors.greenAccent, fontSize: 60)),
-                FlatButton(
-                  child: Text('Buy It'),
-                  color: Colors.green,
-                  onPressed: () => _buyProduct(prod),
-                ),
-              ]
-          ],
-        ),
-      ),
-    );
+  Widget build(context) {
+    return FutureBuilder<List<ProductDetails>>(
+        future: getProductsAfterLoading(),
+        builder: (context, AsyncSnapshot<List<ProductDetails>> snapshot) {
+          if (snapshot.hasData &&
+              snapshot.data != null &&
+              snapshot.data.length > 0) {
+            token = Provider.of<Token>(context);
+            return Scaffold(
+              appBar: AppBar(
+                title: Text(_available ? 'Open for Business' : 'Not Available'),
+              ),
+              body: Center(
+                child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: _getData(snapshot)),
+              ),
+            );
+          } else {
+            return new CircularProgressIndicator();
+          }
+        });
   }
 
+  List<Widget> _getData(AsyncSnapshot snapshot) {
+    ProductDetails prod = snapshot.data[0];
+    return [
+      // UI if already purchased
 
+      Text('📀 ${token.total ?? 0} Jeton', style: TextStyle(fontSize: 60)),
+      FlatButton(
+        child: Text('Consume'),
+        color: Colors.green,
+        onPressed: () => _updateUserTokenConsume(),
+      ),
+      FlatButton(
+        child: Text('Buy It'),
+        color: Colors.green,
+        onPressed: () => _buyProduct(prod),
+      ),
 
+      Text("("+ prod.price +")",
+          style: TextStyle(color: Colors.greenAccent, fontSize: 18)),
+    ];
+  }
 }

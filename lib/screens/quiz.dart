@@ -163,21 +163,6 @@ class CongratsPage extends StatelessWidget {
       }),
     );
   }
-  /// Database write to update token after purchase
-  Future<void> _updateUserTokenPurchase() {
-    return Global.tokenRef.upsert(
-      ({
-        'total': FieldValue.increment(9)
-      }),
-    );
-  }
-  Future<void> _updateUserTokenConsume() {
-    return Global.tokenRef.upsert(
-      ({
-        'total': FieldValue.increment(-1)
-      }),
-    );
-  }
 }
 
 
