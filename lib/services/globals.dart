@@ -16,11 +16,14 @@ class Global {
     Quiz: (data) => Quiz.fromMap(data),
     Report: (data) => Report.fromMap(data),
     Token: (data) => Token.fromMap(data),
+    LockReport: (data) => LockReport.fromMap(data),
+
   };
 
   // Firestore References for Writes
   static final Collection<Topic> topicsRef = Collection<Topic>(path: 'topics');
   static final UserData<Report> reportRef = UserData<Report>(collection: 'reports');
+  static final UserData<LockReport> lockReportRef = UserData<LockReport>(collection: 'lockReports');
   static final UserData<Token> tokenRef = UserData<Token>(collection: 'tokens');
 
 }

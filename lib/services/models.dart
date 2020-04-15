@@ -73,6 +73,22 @@ class Topic {
 }
 
 
+class LockReport {
+  String uid;
+  dynamic quizzes;
+
+  LockReport({ this.uid, this.quizzes });
+
+  factory LockReport.fromMap(Map data) {
+    if(data!=null)
+      return LockReport(
+        uid: data['uid'],
+        quizzes: data['quizzes'] ?? {},
+      );
+  }
+
+}
+
 class Report {
   String uid;
   int total;

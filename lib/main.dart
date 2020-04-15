@@ -7,13 +7,13 @@ import 'services/services.dart';
 import 'screens/screens.dart';
 import 'package:provider/provider.dart';
 
-
 void main() {
   ///Include this in main() so purchases are enabled
   InAppPurchaseConnection.enablePendingPurchases();
 
   runApp(MyApp());
 }
+
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {

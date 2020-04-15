@@ -40,6 +40,8 @@ class QuizScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+
     return ChangeNotifierProvider(
       builder: (_) => QuizState(),
       child: FutureBuilder(
@@ -71,7 +73,7 @@ class QuizScreen extends StatelessWidget {
                   } else if (idx == quiz.questions.length + 1) {
                     return CongratsPage(quiz: quiz);
                   } else {
-                    return QuestionPage(question: quiz.questions[idx - 1]);
+                    return QuestionPage(question: quiz.questions[idx - 1], quiz: quiz);
                   }
                 },
               ),
@@ -87,33 +89,46 @@ class StartPage extends StatelessWidget {
   final Quiz quiz;
   final PageController controller;
   StartPage({this.quiz, this.controller});
-
+  bool isLocked(snapshot){
+    return (snapshot.hasData &&
+        snapshot.data != null &&
+        snapshot.data.quizzes != null &&
+        snapshot.data.quizzes[quiz.topic] != null &&
+        snapshot.data.quizzes[quiz.topic]["wrongNumber"] ==3);
+  }
   @override
   Widget build(BuildContext context) {
-    var state = Provider.of<QuizState>(context);
+    return FutureBuilder<LockReport>(
+      future:  Global.lockReportRef.getDocument(),
+       builder: (context, AsyncSnapshot<LockReport> snapshot) {
 
-    return Container(
-      padding: EdgeInsets.all(20),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(quiz.title, style: Theme.of(context).textTheme.headline),
-          Divider(),
-          Expanded(child: Text(quiz.description)),
-          ButtonBar(
-            alignment: MainAxisAlignment.center,
-            children: <Widget>[
-              FlatButton.icon(
-                onPressed: state.nextPage,
-                label: Text('Start Quiz!'),
-                icon: Icon(Icons.poll),
-                color: Colors.green,
-              )
-            ],
-          )
-        ],
-      ),
-    );
+           var state = Provider.of<QuizState>(context);
+           return Container(
+             padding: EdgeInsets.all(20),
+             child: Column(
+               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+               children: [
+                 Text(quiz.title, style: Theme.of(context).textTheme.headline),
+                 Divider(),
+                 Expanded(child: Text(quiz.description)),
+                 ButtonBar(
+                   alignment: MainAxisAlignment.center,
+                   children: <Widget>[
+                     FlatButton.icon(
+                       onPressed: state.nextPage,
+                       label: isLocked(snapshot)? Text('Locked') : Text('Start Quiz!'),
+                       icon: Icon(Icons.poll),
+                       color: Colors.green,
+                     )
+                   ],
+                 )
+               ],
+             ),
+           );
+
+       });
+
+
   }
 }
 
@@ -153,6 +168,7 @@ class CongratsPage extends StatelessWidget {
     );
   }
 
+
   /// Database write to update report doc when complete
   Future<void> _updateUserReport(Quiz quiz) {
     return Global.reportRef.upsert(
@@ -169,7 +185,8 @@ class CongratsPage extends StatelessWidget {
 
 class QuestionPage extends StatelessWidget {
   final Question question;
-  QuestionPage({this.question});
+  final Quiz quiz;
+  QuestionPage({this.question, this.quiz});
   Token token;
   @override
   Widget build(BuildContext context) {
@@ -230,12 +247,22 @@ class QuestionPage extends StatelessWidget {
     );
   }
 
+  /// Database write to update report doc when complete
+  Future<void> _updateUserReportForWrongQuestion(Quiz quiz)  {
+   return  Global.lockReportRef.upsert(
+      ({
+
+        'quizzes': {
+          '${quiz.topic}': { 'wrongNumber': FieldValue.increment(1)}
+        }
+      }),
+    );
+
+  }
   /// Bottom sheet shown when Question is answered
   _bottomSheet(BuildContext context, Option opt) {
     bool correct = opt.correct;
-    if(!correct){
-      TokenProcess.getState().updateUserTokenConsume();
-    }
+
     var state = Provider.of<QuizState>(context);
     showModalBottomSheet(
       context: context,
@@ -277,5 +304,11 @@ class QuestionPage extends StatelessWidget {
         );
       },
     );
+    if(!correct){
+      TokenProcess.getState().updateUserTokenConsume();
+      _updateUserReportForWrongQuestion(quiz);
+    }
   }
+
+
 }
