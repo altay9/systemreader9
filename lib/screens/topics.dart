@@ -1,5 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:define9/shared/lockprocess.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../services/services.dart';
 import '../shared/shared.dart';
 import '../screens/screens.dart';
@@ -14,10 +16,13 @@ class TopicsScreen extends StatelessWidget {
       builder: (BuildContext context, AsyncSnapshot snap) {
         if (snap.hasData) {
           List<Topic> topics = snap.data;
+
+          List<TopicFinished> topicFinished =  Provider.of<List<TopicFinished>>(context);
+           print(topicFinished);
           return Scaffold(
             appBar: AppBar(
               backgroundColor: Colors.deepPurple,
-              title: Text('Topics'),
+              title: Text('Topics:'+topicFinished[0].id ?? "1"),
               actions: [
                 IconButton(
                   icon: Icon(FontAwesomeIcons.userCircle,

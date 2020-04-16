@@ -13,6 +13,7 @@ class Global {
     // Data Models
   static final Map models = {
     Topic: (data) => Topic.fromMap(data),
+    TopicFinished: (data) => TopicFinished.fromMap(data),
     Quiz: (data) => Quiz.fromMap(data),
     Report: (data) => Report.fromMap(data),
     Token: (data) => Token.fromMap(data),
@@ -21,6 +22,7 @@ class Global {
   };
 
   // Firestore References for Writes
+  static final Collection<TopicFinished> topicFinishedRef = Collection<TopicFinished>(path: 'topicFinished');
   static final Collection<Topic> topicsRef = Collection<Topic>(path: 'topics');
   static final UserData<Report> reportRef = UserData<Report>(collection: 'reports');
   static final UserData<LockReport> lockReportRef = UserData<LockReport>(collection: 'lockReports');

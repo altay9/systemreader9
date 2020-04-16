@@ -20,6 +20,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
+        StreamProvider<List<TopicFinished>>.value(value: Global.topicFinishedRef.streamTopicFinished()),
         StreamProvider<Report>.value(value: Global.reportRef.documentStream),
         StreamProvider<Token>.value(value: Global.tokenRef.documentStream),
         StreamProvider<FirebaseUser>.value(value: AuthService().user),

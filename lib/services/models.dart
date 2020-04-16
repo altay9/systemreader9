@@ -73,6 +73,23 @@ class Topic {
 }
 
 
+class TopicFinished {
+  final String id;
+  final String title;
+  final  String user;
+
+  TopicFinished({ this.id, this.title, this.user });
+
+  factory TopicFinished.fromMap(Map data) {
+    return TopicFinished(
+      id: data['id'] ?? '',
+      title: data['title'] ?? '',
+        user: data['user'] ?? ''
+    );
+  }
+
+}
+
 class LockReport {
   String uid;
   dynamic quizzes;

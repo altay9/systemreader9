@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:define9/services/models.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'dart:async';
 import 'package:rxdart/rxdart.dart';
@@ -45,6 +46,16 @@ class Collection<T> {
 
   Stream<List<T>> streamData() {
     return ref.snapshots().map((list) => list.documents.map((doc) => Global.models[T](doc.data) as T) );
+  }
+  Stream<QuerySnapshot> snapshots() {
+    return ref.snapshots();
+  }
+  /// Query a subcollection
+  Stream<List<TopicFinished>> streamTopicFinished() {
+
+    return ref.snapshots().map((list) =>
+        list.documents.map((doc) => TopicFinished.fromMap(doc.data)).toList());
+
   }
 
 
