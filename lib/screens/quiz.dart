@@ -1,3 +1,5 @@
+import 'package:define9/main.dart';
+import 'package:define9/shared/lockprocess.dart';
 import 'package:define9/shared/tokenprocess.dart';
 import 'package:flutter/material.dart';
 import '../shared/shared.dart';
@@ -66,7 +68,7 @@ class QuizScreen extends StatelessWidget {
                 scrollDirection: Axis.vertical,
                 controller: state.controller,
                 onPageChanged: (int idx) =>
-                    state.progress = (idx / (quiz.questions.length + 1)),
+                state.progress = (idx / (quiz.questions.length + 1)),
                 itemBuilder: (BuildContext context, int idx) {
                   if (idx == 0) {
                     return StartPage(quiz: quiz);
@@ -84,49 +86,38 @@ class QuizScreen extends StatelessWidget {
     );
   }
 }
-
 class StartPage extends StatelessWidget {
   final Quiz quiz;
   final PageController controller;
   StartPage({this.quiz, this.controller});
-  bool isLocked(snapshot){
-    return (snapshot.hasData &&
-        snapshot.data != null &&
-        snapshot.data.quizzes != null &&
-        snapshot.data.quizzes[quiz.topic] != null &&
-        snapshot.data.quizzes[quiz.topic]["wrongNumber"] ==3);
-  }
+
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<LockReport>(
-      future:  Global.lockReportRef.getDocument(),
-       builder: (context, AsyncSnapshot<LockReport> snapshot) {
+    var state = Provider.of<QuizState>(context);
+    return Container(
+      padding: EdgeInsets.all(20),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(quiz.title, style: Theme.of(context).textTheme.headline),
+          Divider(),
+          Expanded(child: Text(quiz.description)),
+          ButtonBar(
+            alignment: MainAxisAlignment.center,
+            children: <Widget>[
+              FlatButton.icon(
+                onPressed: state.nextPage,
+                label: false ? Text('Locked') : Text('Start Quiz!'),
+                icon: Icon(Icons.poll),
+                color: Colors.green,
+              )
+            ],
+          )
+        ],
+      ),
+    );
 
-           var state = Provider.of<QuizState>(context);
-           return Container(
-             padding: EdgeInsets.all(20),
-             child: Column(
-               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-               children: [
-                 Text(quiz.title, style: Theme.of(context).textTheme.headline),
-                 Divider(),
-                 Expanded(child: Text(quiz.description)),
-                 ButtonBar(
-                   alignment: MainAxisAlignment.center,
-                   children: <Widget>[
-                     FlatButton.icon(
-                       onPressed: state.nextPage,
-                       label: isLocked(snapshot)? Text('Locked') : Text('Start Quiz!'),
-                       icon: Icon(Icons.poll),
-                       color: Colors.green,
-                     )
-                   ],
-                 )
-               ],
-             ),
-           );
 
-       });
 
 
   }
@@ -159,7 +150,7 @@ class CongratsPage extends StatelessWidget {
               Navigator.pushNamedAndRemoveUntil(
                 context,
                 '/topics',
-                (route) => false,
+                    (route) => false,
               );
             },
           )
@@ -247,18 +238,8 @@ class QuestionPage extends StatelessWidget {
     );
   }
 
-  /// Database write to update report doc when complete
-  Future<void> _updateUserReportForWrongQuestion(Quiz quiz)  {
-   return  Global.lockReportRef.upsert(
-      ({
 
-        'quizzes': {
-          '${quiz.topic}': { 'wrongNumber': FieldValue.increment(1)}
-        }
-      }),
-    );
 
-  }
   /// Bottom sheet shown when Question is answered
   _bottomSheet(BuildContext context, Option opt) {
     bool correct = opt.correct;
@@ -306,9 +287,9 @@ class QuestionPage extends StatelessWidget {
     );
     if(!correct){
       TokenProcess.getState().updateUserTokenConsume();
-      _updateUserReportForWrongQuestion(quiz);
+      LockProcess.getState().updateUserReportForWrongQuestion(quiz.topic);
+
     }
   }
-
 
 }

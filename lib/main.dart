@@ -13,6 +13,7 @@ void main() {
 
   runApp(MyApp());
 }
+final GlobalKey<NavigatorState> navigatorKey = new GlobalKey<NavigatorState>();
 
 class MyApp extends StatelessWidget {
   @override
@@ -55,6 +56,7 @@ class MyApp extends StatelessWidget {
           ),
           buttonTheme: ButtonThemeData(),
         ),
+        navigatorKey: navigatorKey,
       ),
     );
   }

@@ -1,3 +1,4 @@
+import 'package:define9/shared/lockprocess.dart';
 import 'package:flutter/material.dart';
 import '../services/services.dart';
 import '../shared/shared.dart';
@@ -42,6 +43,31 @@ class TopicsScreen extends StatelessWidget {
     );
   }
 }
+showAlertDialog(BuildContext context) {
+
+  // set up the buttons
+  Widget remindButton = FlatButton(
+    child: Text("Devam"),
+    onPressed:  () {Navigator.pop(context);},
+  );
+
+  // set up the AlertDialog
+  AlertDialog alert = AlertDialog(
+    title: Text("Bilgi"),
+    content: Text("Bu bulmaca 3 adet yanlış cevap verdiğiniz için kitlenmiştir."),
+    actions: [
+      remindButton,
+    ],
+  );
+
+  // show the dialog
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return alert;
+    },
+  );
+}
 
 class TopicItem extends StatelessWidget {
   final Topic topic;
@@ -56,11 +82,20 @@ class TopicItem extends StatelessWidget {
           clipBehavior: Clip.antiAlias,
           child: InkWell(
             onTap: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (BuildContext context) => TopicScreen(topic: topic),
-                ),
-              );
+
+              Global.lockReportRef.getDocument().then((snapshot) {
+                if(LockProcess.getState().isLocked(snapshot, topic.id)){
+                  showAlertDialog(context);
+                }else{
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (BuildContext context) => TopicScreen(topic: topic),
+                    ),
+                  );
+                }
+              });
+
+
             },
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
