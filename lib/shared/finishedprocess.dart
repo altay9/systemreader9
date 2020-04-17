@@ -26,24 +26,15 @@ class FinishedProcess{
   }
   /// Database write to update quiz information if it is finished
   Future<void> updateTopicFinished(topic)  {
-    Global.lockReportRef.upsert(
-      ({
 
-
-          '${topic}': { 'title': topic}
-
-      }),
-    );
-   checkLock(topic);
   }
-  checkLock(topic){
-    Global.lockReportRef.getDocument().then((snapshot) {
-      if(isFinished(snapshot, topic)){
+  checkLock(topicFinished, topic){
+       if(isFinished(topicFinished, topic)){
 
         navigatorKey.currentState.pushNamed("/topics");
 
       }
-    });
+
   }
 
 }

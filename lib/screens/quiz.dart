@@ -1,5 +1,7 @@
 import 'package:define9/main.dart';
+import 'package:define9/shared/finishedprocess.dart';
 import 'package:define9/shared/lockprocess.dart';
+import 'package:define9/shared/show_alert.dart';
 import 'package:define9/shared/tokenprocess.dart';
 import 'package:flutter/material.dart';
 import '../shared/shared.dart';
@@ -183,7 +185,11 @@ class QuestionPage extends StatelessWidget {
   Widget build(BuildContext context) {
     var state = Provider.of<QuizState>(context);
     token = Provider.of<Token>(context);
-
+    List<TopicFinished> topicFinished =  Provider.of<List<TopicFinished>>(context);
+   if(FinishedProcess.getState().isFinished(topicFinished, quiz.topic))
+    {
+     return  getAlertDialog( "title", "description");
+    }
     return Column(
       mainAxisAlignment: MainAxisAlignment.end,
       children: [

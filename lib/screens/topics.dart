@@ -1,12 +1,13 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:define9/shared/finishedprocess.dart';
 import 'package:define9/shared/lockprocess.dart';
+import 'package:define9/shared/show_alert.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
+
+import '../screens/screens.dart';
 import '../services/services.dart';
 import '../shared/shared.dart';
-import '../screens/screens.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class TopicsScreen extends StatelessWidget {
   @override
@@ -46,35 +47,6 @@ class TopicsScreen extends StatelessWidget {
   }
 }
 
-showAlertDialog(BuildContext context, var title, var description) {
-  // set up the buttons
-  Widget remindButton = FlatButton(
-    child: Text("Devam"),
-    onPressed: () {
-      Navigator.pop(context);
-    },
-  );
-
-  // set up the AlertDialog
-  AlertDialog alert = AlertDialog(
-    title: Text(
-      title,
-    ),
-    content:
-        Text(description),
-    actions: [
-      remindButton,
-    ],
-  );
-
-  // show the dialog
-  showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return alert;
-    },
-  );
-}
 
 class TopicItem extends StatelessWidget {
   final Topic topic;
