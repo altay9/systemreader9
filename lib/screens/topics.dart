@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:define9/shared/finishedprocess.dart';
 import 'package:define9/shared/lockprocess.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -8,7 +9,6 @@ import '../screens/screens.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class TopicsScreen extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
@@ -16,13 +16,10 @@ class TopicsScreen extends StatelessWidget {
       builder: (BuildContext context, AsyncSnapshot snap) {
         if (snap.hasData) {
           List<Topic> topics = snap.data;
-
-          List<TopicFinished> topicFinished =  Provider.of<List<TopicFinished>>(context);
-           print(topicFinished);
           return Scaffold(
             appBar: AppBar(
               backgroundColor: Colors.deepPurple,
-              title: Text('Topics:'+topicFinished[0].id ?? "1"),
+              title: Text('Topics'),
               actions: [
                 IconButton(
                   icon: Icon(FontAwesomeIcons.userCircle,
@@ -48,18 +45,23 @@ class TopicsScreen extends StatelessWidget {
     );
   }
 }
-showAlertDialog(BuildContext context) {
 
+showAlertDialog(BuildContext context, var title, var description) {
   // set up the buttons
   Widget remindButton = FlatButton(
     child: Text("Devam"),
-    onPressed:  () {Navigator.pop(context);},
+    onPressed: () {
+      Navigator.pop(context);
+    },
   );
 
   // set up the AlertDialog
   AlertDialog alert = AlertDialog(
-    title: Text("Bilgi"),
-    content: Text("Bu bulmaca 3 adet yanlış cevap verdiğiniz için kitlenmiştir."),
+    title: Text(
+      title,
+    ),
+    content:
+        Text(description),
     actions: [
       remindButton,
     ],
@@ -80,6 +82,10 @@ class TopicItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    LockReport lockReport = Provider.of<LockReport>(context);
+    List<TopicFinished> topicFinished =
+        Provider.of<List<TopicFinished>>(context);
+    print(topicFinished);
     return Container(
       child: Hero(
         tag: topic.img,
@@ -87,20 +93,19 @@ class TopicItem extends StatelessWidget {
           clipBehavior: Clip.antiAlias,
           child: InkWell(
             onTap: () {
-
-              Global.lockReportRef.getDocument().then((snapshot) {
-                if(LockProcess.getState().isLocked(snapshot, topic.id)){
-                  showAlertDialog(context);
-                }else{
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (BuildContext context) => TopicScreen(topic: topic),
-                    ),
-                  );
-                }
-              });
-
-
+              var entry= FinishedProcess.getState().getFinishEntry(topicFinished, topic.id);
+              if (entry!=null) {
+                showAlertDialog(context, "💎 Define bulundu!", "Define avcısı " + entry.user + " defineyi buldu! Tebrikler!");
+              }else if (LockProcess.getState().isLocked(lockReport, topic.id)) {
+                showAlertDialog(context, "🔒 Kilitli", "Bu bulmaca 3 adet yanlış cevap verdiğiniz için kitlenmiştir." );
+              } else {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (BuildContext context) =>
+                        TopicScreen(topic: topic),
+                  ),
+                );
+              }
             },
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -125,7 +130,17 @@ class TopicItem extends StatelessWidget {
                         ),
                       ),
                     ),
-                    // Text(topic.description)
+                    if (LockProcess.getState().isLocked(lockReport, topic.id))
+                      Icon(
+                        FontAwesomeIcons.lock,
+                        size: 18,
+                        color: Colors.red,
+                      ),
+                    if (FinishedProcess.getState()
+                        .isFinished(topicFinished, topic.id))
+                      Text(
+                        "💎",
+                       )
                   ],
                 ),
                 // )
@@ -173,7 +188,6 @@ class QuizList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    
     return Column(
         children: topic.quizzes.map((quiz) {
       return Card(

@@ -22,6 +22,7 @@ class MyApp extends StatelessWidget {
       providers: [
         StreamProvider<List<TopicFinished>>.value(value: Global.topicFinishedRef.streamTopicFinished()),
         StreamProvider<Report>.value(value: Global.reportRef.documentStream),
+        StreamProvider<LockReport>.value(value: Global.lockReportRef.documentStream),
         StreamProvider<Token>.value(value: Global.tokenRef.documentStream),
         StreamProvider<FirebaseUser>.value(value: AuthService().user),
       ],
