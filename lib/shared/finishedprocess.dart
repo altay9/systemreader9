@@ -24,17 +24,6 @@ class FinishedProcess{
     }
      return entry;
   }
-  /// Database write to update quiz information if it is finished
-  Future<void> updateTopicFinished(topic)  {
 
-  }
-  checkLock(topicFinished, topic){
-       if(isFinished(topicFinished, topic)){
-
-        navigatorKey.currentState.pushNamed("/topics");
-
-      }
-
-  }
 
 }

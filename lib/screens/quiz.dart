@@ -186,9 +186,15 @@ class QuestionPage extends StatelessWidget {
     var state = Provider.of<QuizState>(context);
     token = Provider.of<Token>(context);
     List<TopicFinished> topicFinished =  Provider.of<List<TopicFinished>>(context);
-   if(FinishedProcess.getState().isFinished(topicFinished, quiz.topic))
+    TopicFinished entry= FinishedProcess.getState().getFinishEntry(topicFinished, quiz.topic);
+    if(entry!=null)
     {
-     return  getAlertDialog( "title", "description");
+     return  getAlertDialog(  "💎 Define bulundu!", "Define avcısı " + entry.user + " defineyi buldu! Tebrikler!");
+    }
+    LockReport lockReport =  Provider.of<LockReport>(context);
+    if(LockProcess.getState().isLocked(lockReport, quiz.topic))
+    {
+      return  getAlertDialog( "🔒 Kilitli","Bu bulmaca 3 adet yanlış cevap verdiğiniz için kitlenmiştir." );
     }
     return Column(
       mainAxisAlignment: MainAxisAlignment.end,
