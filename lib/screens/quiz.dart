@@ -210,6 +210,8 @@ class QuestionPage extends StatelessWidget {
   Widget build(BuildContext context) {
     var state = Provider.of<QuizState>(context);
     token = Provider.of<Token>(context);
+
+
     List<TopicFinished> topicFinished =  Provider.of<List<TopicFinished>>(context);
     TopicFinished entry= FinishedProcess.getState().getFinishEntry(topicFinished, quiz.topic);
     if(entry!=null)
@@ -242,8 +244,15 @@ class QuestionPage extends StatelessWidget {
                 color: Colors.black26,
                 child: InkWell(
                   onTap: () {
-                    state.selected = opt;
-                    _bottomSheet(context, opt);
+                    if(token!=null && token.total==0)
+                    {
+                        showAlertDialog(context, "📀 Yetersiz bakiye", "Define avına devâm etmek için jeton yüklemelisin.");
+
+                    }else{
+                      state.selected = opt;
+                      _bottomSheet(context, opt);
+                    }
+
                   },
                   child: Container(
                     padding: EdgeInsets.all(16),
