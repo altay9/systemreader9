@@ -3,6 +3,7 @@ import 'package:define9/shared/finishedprocess.dart';
 import 'package:define9/shared/lockprocess.dart';
 import 'package:define9/shared/show_alert.dart';
 import 'package:define9/shared/tokenprocess.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../shared/shared.dart';
 import '../services/services.dart';
@@ -149,19 +150,43 @@ class CongratsPage extends StatelessWidget {
             label: Text(' Mark Complete!'),
             onPressed: () {
               _updateUserReport(quiz);
-              Navigator.pushNamedAndRemoveUntil(
-                context,
-                '/topics',
-                    (route) => false,
-              );
+              markTopicFinished(quiz).then((String username) {
+
+                Navigator.pushNamedAndRemoveUntil(
+                  context,
+                  '/topics',
+                      (route) => false,
+                );
+
+                  showAlertDialog( context, "💎 Defineyi buldun!"
+                      , "Define avcısı " + username + " defineyi buldun! Tebrikler!");
+
+
+              });
+
+
             },
           )
         ],
       ),
     );
   }
+  redirect(BuildContext context){
 
+    Navigator.pushNamedAndRemoveUntil(
+      context,
+      '/topics',
+          (route) => false,
+    );
+  }
+  Future<String>  markTopicFinished(Quiz quiz) async{
+    final FirebaseAuth _auth = FirebaseAuth.instance;
+    FirebaseUser user = await _auth.currentUser();
+    TopicFinished topicFinished= new TopicFinished.withParams(quiz.topic, user.displayName, user.uid);
 
+    Global.topicFinishedRef.add(topicFinished);
+    return topicFinished.user;
+  }
   /// Database write to update report doc when complete
   Future<void> _updateUserReport(Quiz quiz) {
     return Global.reportRef.upsert(

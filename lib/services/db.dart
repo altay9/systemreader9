@@ -57,7 +57,14 @@ class Collection<T> {
         list.documents.map((doc) => TopicFinished.fromMap(doc.data)).toList());
 
   }
-
+  Future add(var data) async {
+    try {
+      await ref.document(data.id).setData(data.toMap());
+      return true;
+    } catch (e) {
+      return e.toString();
+    }
+  }
 
 }
 

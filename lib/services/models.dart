@@ -74,17 +74,29 @@ class Topic {
 
 
 class TopicFinished {
-  final String id;
-  final String title;
-  final  String user;
+    String id;
 
-  TopicFinished({ this.id, this.title, this.user });
+     String user;
+    String uid;
+  TopicFinished({ this.id, this.user, String uid });
 
+  TopicFinished.withParams(String id,  String user, String uid) {
+    this.id = id;
+    this.user = user;
+    this.uid= uid;
+  }
+    Map<String, dynamic> toMap() {
+      return {
+        'id': this.id,
+        'user': this.user,
+        'uid': this.uid
+      };
+    }
   factory TopicFinished.fromMap(Map data) {
     return TopicFinished(
-      id: data['id'] ?? '',
-      title: data['title'] ?? '',
-        user: data['user'] ?? ''
+        id: data['id'] ?? '',
+        user: data['user'] ?? '',
+        uid: data['uid'] ?? ''
     );
   }
 
