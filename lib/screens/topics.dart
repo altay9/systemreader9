@@ -19,7 +19,7 @@ class TopicsScreen extends StatelessWidget {
           List<Topic> topics = snap.data;
           return Scaffold(
             appBar: AppBar(
-              backgroundColor: Colors.deepPurple,
+              backgroundColor: Colors.blue,
               title: Text('Topics'),
               actions: [
                 IconButton(
@@ -56,7 +56,7 @@ class TopicItem extends StatelessWidget {
   Widget build(BuildContext context) {
     LockReport lockReport = Provider.of<LockReport>(context);
     List<TopicFinished> topicFinished =
-        Provider.of<List<TopicFinished>>(context);
+    Provider.of<List<TopicFinished>>(context);
     print(topicFinished);
     return Container(
       child: Hero(
@@ -79,45 +79,47 @@ class TopicItem extends StatelessWidget {
                 );
               }
             },
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Image.asset(
-                  'assets/covers/${topic.img}',
-                  fit: BoxFit.contain,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Expanded(
-                      child: Padding(
-                        padding: EdgeInsets.only(left: 10, right: 10),
-                        child: Text(
-                          topic.title,
-                          style: TextStyle(
-                              height: 1.5, fontWeight: FontWeight.bold),
-                          overflow: TextOverflow.fade,
-                          softWrap: false,
+            child: SingleChildScrollView(
+              child:  Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Image.network(
+                    '${topic.img}',
+                    fit: BoxFit.contain,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(
+                        child: Padding(
+                          padding: EdgeInsets.only(left: 10, right: 10),
+                          child: Text(
+                            topic.title,
+                            style: TextStyle(
+                                height: 1.5, fontWeight: FontWeight.bold),
+                            overflow: TextOverflow.fade,
+                            softWrap: false,
+                          ),
                         ),
                       ),
-                    ),
-                    if (LockProcess.getState().isLocked(lockReport, topic.id))
-                      Icon(
-                        FontAwesomeIcons.lock,
-                        size: 18,
-                        color: Colors.red,
-                      ),
-                    if (FinishedProcess.getState()
-                        .isFinished(topicFinished, topic.id))
-                      Text(
-                        "💎",
-                       )
-                  ],
-                ),
-                // )
-                TopicProgress(topic: topic),
-              ],
+                      if (LockProcess.getState().isLocked(lockReport, topic.id))
+                        Icon(
+                          FontAwesomeIcons.lock,
+                          size: 18,
+                          color: Colors.red,
+                        ),
+                      if (FinishedProcess.getState()
+                          .isFinished(topicFinished, topic.id))
+                        Text(
+                          "💎",
+                        )
+                    ],
+                  ),
+                  // )
+                  TopicProgress(topic: topic),
+                ],
+              ),
             ),
           ),
         ),
@@ -140,13 +142,13 @@ class TopicScreen extends StatelessWidget {
       body: ListView(children: [
         Hero(
           tag: topic.img,
-          child: Image.asset('assets/covers/${topic.img}',
+          child: Image.network('${topic.img}',
               width: MediaQuery.of(context).size.width),
         ),
         Text(
           topic.title,
           style:
-              TextStyle(height: 2, fontSize: 20, fontWeight: FontWeight.bold),
+          TextStyle(height: 2, fontSize: 20, fontWeight: FontWeight.bold),
         ),
         QuizList(topic: topic)
       ]),
@@ -162,36 +164,36 @@ class QuizList extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
         children: topic.quizzes.map((quiz) {
-      return Card(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.zero),
-        elevation: 4,
-        margin: EdgeInsets.all(4),
-        child: InkWell(
-          onTap: () {
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (BuildContext context) => QuizScreen(quizId: quiz.id),
+          return Card(
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.zero),
+            elevation: 4,
+            margin: EdgeInsets.all(4),
+            child: InkWell(
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (BuildContext context) => QuizScreen(quizId: quiz.id),
+                  ),
+                );
+              },
+              child: Container(
+                padding: EdgeInsets.all(8),
+                child: ListTile(
+                  title: Text(
+                    quiz.title,
+                    style: Theme.of(context).textTheme.title,
+                  ),
+                  subtitle: Text(
+                    quiz.description,
+                    overflow: TextOverflow.fade,
+                    style: Theme.of(context).textTheme.subhead,
+                  ),
+                  leading: QuizBadge(topic: topic, quizId: quiz.id),
+                ),
               ),
-            );
-          },
-          child: Container(
-            padding: EdgeInsets.all(8),
-            child: ListTile(
-              title: Text(
-                quiz.title,
-                style: Theme.of(context).textTheme.title,
-              ),
-              subtitle: Text(
-                quiz.description,
-                overflow: TextOverflow.fade,
-                style: Theme.of(context).textTheme.subhead,
-              ),
-              leading: QuizBadge(topic: topic, quizId: quiz.id),
             ),
-          ),
-        ),
-      );
-    }).toList());
+          );
+        }).toList());
   }
 }
 
