@@ -1,10 +1,12 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:provider/provider.dart';
 
 
 class MessageHandler   {
@@ -19,12 +21,12 @@ class MessageHandler   {
     if (Platform.isIOS) {
       iosSubscription = _fcm.onIosSettingsRegistered.listen((data) {
         print(data);
-        _saveDeviceToken();
+        _saveDeviceToken(context);
       });
 
       _fcm.requestNotificationPermissions(IosNotificationSettings());
     } else {
-      _saveDeviceToken();
+      _saveDeviceToken(context);
     }
 
     _fcm.configure(
@@ -81,28 +83,32 @@ class MessageHandler   {
 
 
   /// Get the token, save it to the database for current user
-  _saveDeviceToken() async {
+  _saveDeviceToken(BuildContext context) async {
     // Get the current user
-    String uid = 'jeffd23';
-    // FirebaseUser user = await _auth.currentUser();
+    FirebaseUser user = Provider.of<FirebaseUser>(context);
+    if (user != null) {
+      String uid = user.uid;
+      // FirebaseUser user = await _auth.currentUser();
 
-    // Get the token for this device
-    String fcmToken = await _fcm.getToken();
+      // Get the token for this device
+      String fcmToken = await _fcm.getToken();
 
-    // Save it to Firestore
-    if (fcmToken != null) {
-      var tokens = _db
-          .collection('users')
-          .document(uid)
-          .collection('tokens')
-          .document(fcmToken);
+      // Save it to Firestore
+      if (fcmToken != null) {
+        var tokens = _db
+            .collection('users')
+            .document(uid)
+            .collection('tokens')
+            .document(fcmToken);
 
-      await tokens.setData({
-        'token': fcmToken,
-        'createdAt': FieldValue.serverTimestamp(), // optional
-        'platform': Platform.operatingSystem // optional
-      });
+        await tokens.setData({
+          'token': fcmToken,
+          'createdAt': FieldValue.serverTimestamp(), // optional
+          'platform': Platform.operatingSystem // optional
+        });
+      }
     }
+
   }
 
   /// Subscribe the user to a topic

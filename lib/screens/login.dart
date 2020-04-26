@@ -46,8 +46,7 @@ class LoginScreenState extends State<LoginScreen> {
               icon: FontAwesomeIcons.google,
               color: Colors.black45,
               loginMethod: auth.googleSignIn,
-            ),
-            LoginButton(text: 'Continue as Guest', loginMethod: auth.anonLogin)
+            )
           ],
         ),
       ),
