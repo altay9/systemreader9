@@ -1,9 +1,11 @@
+import 'package:define9/services/notification.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-
+final MessageHandler messageHandler = new MessageHandler();
 class AppBottomNav extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    messageHandler.initState(context);
     return BottomNavigationBar(
       items: [
         BottomNavigationBarItem(
