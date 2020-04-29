@@ -162,8 +162,9 @@ class MarketScreenState extends State<MarketScreen> {
     ProductDetails prod = snapshot.data[0];
     return [
       // UI if already purchased
-
-      Text('📀 ${token.total ?? 0} Jeton', style: TextStyle(fontSize: 60)),
+       if(token!=null)
+         Text('📀 ${token.total ?? 0} Jeton', style: TextStyle(fontSize: 60))
+       ,
       FlatButton(
         child: Text('Buy It'),
         color: Colors.green,

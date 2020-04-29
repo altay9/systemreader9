@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import '../shared/shared.dart';
 import '../services/services.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -17,6 +16,7 @@ class LoginScreenState extends State<LoginScreen> {
       (user) {
         if (user != null) {
           Navigator.pushReplacementNamed(context, '/topics');
+          Navigator.pushReplacementNamed(context, '/topics');
         }
       },
     );
@@ -27,22 +27,25 @@ class LoginScreenState extends State<LoginScreen> {
     return Scaffold(
       body: Container(
         padding: EdgeInsets.all(30),
-        decoration: BoxDecoration(),
+        decoration: BoxDecoration(color: Colors.black),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            FlutterLogo(
-              size: 150,
-            ),
+            new Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  new Image(
+                      image: new AssetImage("assets/logo.png")),
+                ]),
             Text(
-              'Login to Start',
+              'Hoşgeldiniz!',
               style: Theme.of(context).textTheme.headline,
               textAlign: TextAlign.center,
             ),
-            Text('Your Tagline'),
+            Text('Başlamak için giriş yapınız.'),
             LoginButton(
-              text: 'LOGIN WITH GOOGLE',
+              text: 'GOOGLE İLE GİRİŞ',
               icon: FontAwesomeIcons.google,
               color: Colors.black45,
               loginMethod: auth.googleSignIn,

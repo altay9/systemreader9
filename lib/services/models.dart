@@ -143,11 +143,18 @@ class Token {
   Token({ this.uid, this.total });
 
   factory Token.fromMap(Map data) {
-    if(data!=null)
+    if(data!=null){
       return Token(
-        uid: data['uid'],
-        total: data['total'] ?? 0
+          uid: data['uid'],
+          total: data['total'] ?? 0
       );
+    }else{
+      return Token(
+          uid: "",
+          total:  0
+      );
+    }
+
   }
 
 }
