@@ -104,23 +104,19 @@ class MarketScreenState extends State<MarketScreen> {
 
     if (purchase != null && purchase.status == PurchaseStatus.purchased) {
       TokenProcess.getState().updateUserTokenPurchase();
-      makeConsumed(purchase);
     }
   }
+
 
 
   /// Purchase a product
   void _buyProduct(ProductDetails prod) {
     final PurchaseParam purchaseParam = PurchaseParam(productDetails: prod);
     // _iap.buyNonConsumable(purchaseParam: purchaseParam);
-    _iap.buyConsumable(purchaseParam: purchaseParam, autoConsume: false);
+    _iap.buyConsumable(purchaseParam: purchaseParam, autoConsume: true);
   }
 
-  makeConsumed(purchase) async {
-    // Mark consumed just after succesful purchase.
-    var res = await _iap.consumePurchase(purchase);
-    await _getPastPurchases();
-  }
+
 
   makeConsumedTest(prod) async {
     // Mark consumed just after succesful purchase.

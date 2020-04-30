@@ -47,7 +47,7 @@ class LoginScreenState extends State<LoginScreen> {
             LoginButton(
               text: 'GOOGLE İLE GİRİŞ',
               icon: FontAwesomeIcons.google,
-              color: Colors.black45,
+              color: Colors.black26,
               loginMethod: auth.googleSignIn,
             )
           ],
