@@ -27,5 +27,5 @@ class Global {
   static final UserData<Report> reportRef = UserData<Report>(collection: 'reports');
   static final UserData<LockReport> lockReportRef = UserData<LockReport>(collection: 'lockReports');
   static final UserData<Token> tokenRef = UserData<Token>(collection: 'tokens');
-
+  static final Collection<Token> tokenCollectionRef = Collection<Token>(path: 'tokens');
 }

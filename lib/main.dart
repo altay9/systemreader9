@@ -21,6 +21,7 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         StreamProvider<List<TopicFinished>>.value(value: Global.topicFinishedRef.streamTopicFinished()),
+        StreamProvider<List<Topic>>.value(value: Global.topicsRef.streamTopic()),
         StreamProvider<Report>.value(value: Global.reportRef.documentStream),
         StreamProvider<LockReport>.value(value: Global.lockReportRef.documentStream),
         StreamProvider<Token>.value(value: Global.tokenRef.documentStream),
@@ -40,6 +41,7 @@ class MyApp extends StatelessWidget {
           '/about': (context) => AboutScreen(),
           '/read': (context) => ReadScreen(),
           '/purchase': (context) => MarketScreen(),
+          '/ranking': (context) => RankingScreen(),
         },
 
         // Theme

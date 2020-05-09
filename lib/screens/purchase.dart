@@ -56,10 +56,8 @@ class MarketScreenState extends State<MarketScreen> {
     }
 
     _subscription = _iap.purchaseUpdatedStream.listen((data) => setState(() {
-          print('New purchase');
-          _purchases.addAll(data);
-          _verifyPurchase();
-        }));
+      _verifyPurchase(data[0]);
+    }));
   }
 
   /// Get all products available for sale
@@ -97,13 +95,11 @@ class MarketScreenState extends State<MarketScreen> {
   }
 
   /// Your own business logic to setup a consumable
-  void _verifyPurchase() {
-    PurchaseDetails purchase = _hasPurchased(testID);
-
-    // TODO serverside verification & record consumable in the database
+  void _verifyPurchase(PurchaseDetails purchase) {
 
     if (purchase != null && purchase.status == PurchaseStatus.purchased) {
       TokenProcess.getState().updateUserTokenPurchase();
+
     }
   }
 
@@ -111,8 +107,10 @@ class MarketScreenState extends State<MarketScreen> {
 
   /// Purchase a product
   void _buyProduct(ProductDetails prod) {
+
     final PurchaseParam purchaseParam = PurchaseParam(productDetails: prod);
     // _iap.buyNonConsumable(purchaseParam: purchaseParam);
+
     _iap.buyConsumable(purchaseParam: purchaseParam, autoConsume: true);
   }
 

@@ -23,6 +23,9 @@ class AppBottomNav extends StatelessWidget {
         BottomNavigationBarItem(
             icon: Icon(FontAwesomeIcons.coins, size: 20),
             title: Text('Jeton')),
+        BottomNavigationBarItem(
+            icon: Icon(FontAwesomeIcons.gem, size: 20),
+            title: Text('En iyiler')),
       ].toList(),
       fixedColor: Colors.deepPurple[200],
       onTap: (int idx) {
@@ -41,6 +44,9 @@ class AppBottomNav extends StatelessWidget {
             break;
           case 4:
             Navigator.pushNamed(context, '/purchase');
+            break;
+          case 5:
+            Navigator.pushNamed(context, '/ranking');
             break;
         }
       },

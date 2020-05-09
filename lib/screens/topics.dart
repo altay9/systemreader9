@@ -8,15 +8,15 @@ import 'package:provider/provider.dart';
 import '../screens/screens.dart';
 import '../services/services.dart';
 import '../shared/shared.dart';
+class TopicsScreen extends StatefulWidget {
+  createState() => TopicsScreenState();
+}
 
-class TopicsScreen extends StatelessWidget {
+class TopicsScreenState  extends State<TopicsScreen> {
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-      future: Global.topicsRef.getData(),
-      builder: (BuildContext context, AsyncSnapshot snap) {
-        if (snap.hasData) {
-          List<Topic> topics = snap.data;
+
+          List<Topic> topics = Provider.of<List<Topic>>(context);
           return Scaffold(
             appBar: AppBar(
               backgroundColor: Colors.blue,
@@ -29,7 +29,7 @@ class TopicsScreen extends StatelessWidget {
                 )
               ],
             ),
-            drawer: TopicDrawer(topics: snap.data),
+            drawer: TopicDrawer(topics: topics),
             body: GridView.count(
               primary: false,
               padding: const EdgeInsets.all(20.0),
@@ -39,12 +39,9 @@ class TopicsScreen extends StatelessWidget {
             ),
             bottomNavigationBar: AppBottomNav(),
           );
-        } else {
-          return LoadingScreen();
         }
-      },
-    );
-  }
+
+
 }
 
 

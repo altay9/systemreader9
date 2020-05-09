@@ -34,13 +34,19 @@ class Collection<T> {
   final Firestore _db = Firestore.instance;
   final String path; 
   CollectionReference ref;
+  Query queryRef;
 
   Collection({ this.path }) {
     ref = _db.collection(path);
+    queryRef = _db.collection(path).orderBy('total', descending : true);
   }
 
   Future<List<T>> getData() async {
     var snapshots = await ref.getDocuments();
+    return snapshots.documents.map((doc) => Global.models[T](doc.data) as T ).toList();
+  }
+  Future<List<T>> getDataOrderByTotal() async {
+    var snapshots = await queryRef.getDocuments();
     return snapshots.documents.map((doc) => Global.models[T](doc.data) as T ).toList();
   }
 
@@ -57,6 +63,12 @@ class Collection<T> {
         list.documents.map((doc) => TopicFinished.fromMap(doc.data)).toList());
 
   }
+  Stream<List<Topic>> streamTopic() {
+
+    return ref.snapshots().map((list) =>
+        list.documents.map((doc) => Topic.fromMap(doc.data)).toList());
+
+  }
   Future add(var data) async {
     try {
       await ref.document(data.id).setData(data.toMap());
@@ -67,7 +79,6 @@ class Collection<T> {
   }
 
 }
-
 
 class UserData<T> {
   final Firestore _db = Firestore.instance;

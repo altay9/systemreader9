@@ -139,19 +139,24 @@ class Report {
 class Token {
   String uid;
   int total;
-
-  Token({ this.uid, this.total });
+  String displayName;
+  String photoUrl;
+  Token({ this.uid, this.total,  this.displayName, this.photoUrl  });
 
   factory Token.fromMap(Map data) {
     if(data!=null){
       return Token(
-          uid: data['uid'],
-          total: data['total'] ?? 0
+          uid: data['uid'] ?? '',
+          total: data['total'] ?? 0,
+          displayName: data['displayName'] ?? '',
+          photoUrl: data['photoUrl'] ?? '',
       );
     }else{
       return Token(
           uid: "",
-          total:  0
+          total:  0,
+          displayName: '',
+          photoUrl:  '',
       );
     }
 

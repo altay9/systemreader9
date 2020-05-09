@@ -157,9 +157,9 @@ class CongratsPage extends StatelessWidget {
                   '/topics',
                       (route) => false,
                 );
-
+                TokenProcess.getState().updateUserTokenPurchase();
                   showAlertDialog( context, "💎 Defineyi buldun!"
-                      , "Define avcısı " + username + " defineyi buldun! Tebrikler!");
+                      , "Define avcısı " + username + " defineyi bulup 9 Jeton kazandın!");
 
 
               });
