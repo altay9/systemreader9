@@ -1,4 +1,4 @@
-name: define9
+name: systemreader9
 description: Treasure hunting game
 
 # The following defines the version and build number for your application.
@@ -11,7 +11,7 @@ description: Treasure hunting game
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 1.0.5+5
+version: 1.0.7+7
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
@@ -28,7 +28,7 @@ dependencies:
   firebase_analytics: ^2.1.1+3
   firebase_core: ^0.4.0
   firebase_auth: ^0.11.1+6
-  cloud_firestore: ^0.12.5
+  cloud_firestore: ^0.13.5
   firebase_messaging: ^5.0.2
 
 

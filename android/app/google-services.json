@@ -8,17 +8,17 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:30533089081:android:990fa126ba3a187b929ae8",
+        "mobilesdk_app_id": "1:30533089081:android:1f276a9f366973ae929ae8",
         "android_client_info": {
-          "package_name": "com.neodeus.define9"
+          "package_name": "com.neodeus.systemreader9"
         }
       },
       "oauth_client": [
         {
-          "client_id": "30533089081-2gksv64stcn9oiujshm78cajqil9326n.apps.googleusercontent.com",
+          "client_id": "30533089081-5fq7qinmjpv42qj20oeklfo1tcjdapoc.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.neodeus.define9",
+            "package_name": "com.neodeus.systemreader9",
             "certificate_hash": "50633c59daf1cb6f24cb58786310dde48217a3d0"
           }
         },

@@ -5,7 +5,7 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 /// Static global state. Immutable services that do not care about build context. 
 class Global {
   // App Data
-  static final String title = 'Define9';
+  static final String title = 'SystemReader9';
 
   // Services
   static final FirebaseAnalytics analytics = FirebaseAnalytics();

@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:define9/main.dart';
-import 'package:define9/services/globals.dart';
-import 'package:define9/shared/show_alert.dart';
+import 'package:systemreader9/main.dart';
+import 'package:systemreader9/services/globals.dart';
+import 'package:systemreader9/shared/show_alert.dart';
 
 class LockProcess{
   static LockProcess _instance;

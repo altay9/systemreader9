@@ -1,8 +1,7 @@
-import 'package:define9/main.dart';
-import 'package:define9/shared/finishedprocess.dart';
-import 'package:define9/shared/lockprocess.dart';
-import 'package:define9/shared/show_alert.dart';
-import 'package:define9/shared/tokenprocess.dart';
+import 'package:systemreader9/shared/finishedprocess.dart';
+import 'package:systemreader9/shared/lockprocess.dart';
+import 'package:systemreader9/shared/show_alert.dart';
+import 'package:systemreader9/shared/tokenprocess.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../shared/shared.dart';

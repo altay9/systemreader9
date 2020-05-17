@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:define9/main.dart';
-import 'package:define9/services/globals.dart';
+import 'package:systemreader9/main.dart';
+import 'package:systemreader9/services/globals.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';
 

@@ -1,6 +1,6 @@
-import 'package:define9/shared/finishedprocess.dart';
-import 'package:define9/shared/lockprocess.dart';
-import 'package:define9/shared/show_alert.dart';
+import 'package:systemreader9/shared/finishedprocess.dart';
+import 'package:systemreader9/shared/lockprocess.dart';
+import 'package:systemreader9/shared/show_alert.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';

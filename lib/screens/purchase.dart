@@ -1,9 +1,9 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:define9/shared/tokenprocess.dart';
-import 'package:define9/services/globals.dart';
-import 'package:define9/services/models.dart';
+import 'package:systemreader9/shared/tokenprocess.dart';
+import 'package:systemreader9/services/globals.dart';
+import 'package:systemreader9/services/models.dart';
 import 'package:flutter/material.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:provider/provider.dart';

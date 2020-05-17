@@ -1,5 +1,5 @@
-import 'package:define9/services/globals.dart';
-import 'package:define9/services/models.dart';
+import 'package:systemreader9/services/globals.dart';
+import 'package:systemreader9/services/models.dart';
 import 'package:flutter/material.dart';
 
 class RankingScreen extends StatelessWidget {
