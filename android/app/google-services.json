@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "30533089081",
+    "firebase_url": "https://define27-6814c.firebaseio.com",
+    "project_id": "define27-6814c",
+    "storage_bucket": "define27-6814c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:30533089081:android:1f276a9f366973ae929ae8",
+        "android_client_info": {
+          "package_name": "com.neodeus.systemreader9"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "30533089081-ioqo1o7ds3gff1v86cpa4or7d5bj0q85.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.neodeus.systemreader9",
+            "certificate_hash": "5a35ec9ace73bc6bf7a5a4b28c72ceb3ff0380a1"
+          }
+        },
+        {
+          "client_id": "30533089081-tb4ak1f3sjqn11hhmoaasevf9c4g7ct4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBBxnJvLfVFub34NSZgeMj-xdOd6cPoETQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "30533089081-tb4ak1f3sjqn11hhmoaasevf9c4g7ct4.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "30533089081-ip3hpi3p54b1jthd1224pabcp1d8eldg.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.neodeus.define27"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
