@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:systemreader9/shared/logprocess.dart';
 import '../services/services.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -16,10 +17,13 @@ class LoginScreenState extends State<LoginScreen> {
       (user) {
         if (user != null) {
           Navigator.pushReplacementNamed(context, '/topics');
-          Navigator.pushReplacementNamed(context, '/topics');
         }
       },
-    );
+    ).catchError((error, stackTrace) {
+      LogProcess.getState().reportError(error,stackTrace);
+
+    });
+
   }
 
   @override
@@ -76,10 +80,15 @@ class LoginButton extends StatelessWidget {
         icon: Icon(icon, color: Colors.white),
         color: color,
         onPressed: () async {
-          var user = await loginMethod();
-          if (user != null) {
-            Navigator.pushReplacementNamed(context, '/topics');
-          }
+          try {
+            var user = await loginMethod();
+            if (user != null) {
+              Navigator.pushReplacementNamed(context, '/topics');
+            }
+         }  catch(error, stackTrace) {
+          LogProcess.getState().reportError(error,stackTrace);
+         }
+
         },
         label: Expanded(
           child: Text('$text', textAlign: TextAlign.center),

@@ -3,6 +3,8 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:async';
 
+import 'package:systemreader9/shared/logprocess.dart';
+
 class AuthService {
   final GoogleSignIn _googleSignIn = GoogleSignIn();
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -27,8 +29,8 @@ class AuthService {
       updateUserData(user);
 
       return user;
-    } catch (error) {
-      print(error);
+    } catch (error, stackTrace) {
+      LogProcess.getState().reportError(error,stackTrace);
       return null;
     }
   }

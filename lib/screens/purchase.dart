@@ -13,7 +13,7 @@ class MarketScreen extends StatefulWidget {
 }
 
 class MarketScreenState extends State<MarketScreen> {
-  final String testID = 'android.test.purchased';
+  final String testID = 'token';
   Token token;
   /// Is the API available on the device
   bool _available = true;
